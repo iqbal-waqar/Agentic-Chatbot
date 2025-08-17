@@ -13,13 +13,10 @@ import uuid
 class ChatInteractor:
     async def process_chat(self, db: Session, token: str, chat_request: ChatRequest):
         try:
-            # Import here to avoid circular imports
             from backend.interactors.auth import AuthInteractor
             
-            # Get current user from token
             current_user = AuthInteractor.get_current_user(db, token)
             
-            # Get or create session automatically
             session_service = SessionService()
             session_id = session_service.get_or_create_session(
                 db=db,
@@ -59,15 +56,12 @@ class ChatInteractor:
 
     def get_chat_history(self, db: Session, token: str, session_id: uuid.UUID) -> List:
         try:
-            # Import here to avoid circular imports
             from backend.interactors.auth import AuthInteractor
             
-            # Get current user from token
             current_user = AuthInteractor.get_current_user(db, token)
             
             chats = ChatModel.get_chat_history(db, session_id)
             
-            # Filter chats to only return user's own chats
             user_chats = [chat for chat in chats if chat.user_id == current_user.id]
             
             return user_chats
@@ -79,12 +73,9 @@ class ChatInteractor:
             )
 
     def get_user_sessions(self, db: Session, token: str):
-        """Get formatted user sessions"""
         try:
-            # Import here to avoid circular imports
             from backend.interactors.auth import AuthInteractor
             
-            # Get current user from token
             current_user = AuthInteractor.get_current_user(db, token)
             
             session_service = SessionService()
@@ -109,13 +100,10 @@ class ChatInteractor:
     
     def create_new_session(self, db: Session, token: str):
         try:
-            # Import here to avoid circular imports
             from backend.interactors.auth import AuthInteractor
-            
-            # Get current user from token
+    
             current_user = AuthInteractor.get_current_user(db, token)
             
-            # Clear current active session and create new one
             session_service = SessionService()
             session_service.clear_user_active_session(current_user.id)
             session_id = session_service.get_or_create_session(db, current_user.id)
@@ -127,7 +115,6 @@ class ChatInteractor:
             )
     
     def get_available_models(self) -> AvailableModelsResponse:
-        """Get all available models and roles for dropdown selection"""
         try:
             gemini_service = GeminiService()
             groq_service = GroqService()
@@ -153,8 +140,7 @@ class ChatInteractor:
                     for role_id, role_data in AgentRoles().get_roles_summary().items()
                 ]
             )
-        except Exception as e:
-            # Return default values if services fail
+        except Exception as e
             return AvailableModelsResponse(
                 gemini=ModelInfo(
                     provider="gemini",
@@ -164,7 +150,7 @@ class ChatInteractor:
                 ),
                 groq=ModelInfo(
                     provider="groq",
-                    models=["llama-3.3-70b-versatile", "mixtral-8x7b-32768"],
+                    models=["llama-3.3-70b-versatile"],
                     current_model="llama-3.3-70b-versatile", 
                     temperature=0.7
                 ),
