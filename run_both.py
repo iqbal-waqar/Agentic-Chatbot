@@ -12,7 +12,6 @@ class ServiceManager:
         self.project_root = os.path.dirname(os.path.abspath(__file__))
         
     def start_backend(self):
-        """Start the backend server"""
         print("🚀 Starting Backend Server...")
         os.chdir(self.project_root)
         
@@ -24,13 +23,11 @@ class ServiceManager:
             "--port", "8000"
         ])
         
-    def start_frontend(self):
-        """Start the frontend server"""
+    def start_frontend(self):       
         print("🚀 Starting Frontend Server...")
         frontend_dir = os.path.join(self.project_root, "frontend")
         os.chdir(frontend_dir)
         
-        # Check if streamlit is installed
         try:
             import streamlit
         except ImportError:
@@ -48,7 +45,6 @@ class ServiceManager:
         ])
         
     def stop_services(self):
-        """Stop both services"""
         print("\n🛑 Stopping services...")
         
         if self.backend_process:
@@ -68,17 +64,14 @@ class ServiceManager:
             print("✅ Frontend stopped")
     
     def run(self):
-        """Run both services"""
         print("🤖 Agentic Chatbot - Starting Both Services")
         print("=" * 50)
         
         try:
-            # Start backend first
             self.start_backend()
             print("⏳ Waiting for backend to start...")
             time.sleep(3)
             
-            # Start frontend
             self.start_frontend()
             print("⏳ Waiting for frontend to start...")
             time.sleep(3)
@@ -90,7 +83,6 @@ class ServiceManager:
             print("\n🛑 Press Ctrl+C to stop both services")
             print("-" * 50)
             
-            # Wait for processes
             while True:
                 if self.backend_process and self.backend_process.poll() is not None:
                     print("❌ Backend process died!")
@@ -108,12 +100,10 @@ class ServiceManager:
             self.stop_services()
 
 def signal_handler(signum, frame):
-    """Handle Ctrl+C gracefully"""
     print("\n🛑 Received interrupt signal...")
     sys.exit(0)
 
 def main():
-    """Main function"""
     signal.signal(signal.SIGINT, signal_handler)
     
     manager = ServiceManager()
