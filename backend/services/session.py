@@ -1,9 +1,3 @@
-"""
-Session Management Service
-
-This service handles automatic session creation and management for chat conversations.
-"""
-
 import uuid
 from typing import Optional, Dict
 from sqlalchemy.orm import Session
