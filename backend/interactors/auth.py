@@ -6,7 +6,6 @@ from fastapi import HTTPException, status
 import uuid
 
 class AuthInteractor:
-    @staticmethod
     def register_user(db: Session, user_data: UserCreate):
         existing_user = UserModel.get_user_by_username(db, user_data.username)
         if existing_user:
@@ -19,7 +18,6 @@ class AuthInteractor:
         user = UserModel.create_user(db, user_data.username, user_data.email, password_hash)
         return user
     
-    @staticmethod
     def login_user(db: Session, user_data: UserLogin):
         user = UserModel.get_user_by_username(db, user_data.username)
         if not user or not AuthService.verify_password(user_data.password, user.password_hash):
@@ -31,7 +29,6 @@ class AuthInteractor:
         access_token = AuthService.create_access_token({"sub": str(user.id)})
         return Token(access_token=access_token)
     
-    @staticmethod
     def get_current_user(db: Session, token: str):
         try:
             payload = AuthService.verify_token(token)
