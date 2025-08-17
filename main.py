@@ -1,7 +1,3 @@
-"""
-Main FastAPI application for Agentic Chatbot
-"""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.routes import auth, chat
@@ -14,24 +10,19 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure this properly for production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include routers
 app.include_router(auth.router)
 app.include_router(chat.router)
 
 @app.get("/", tags=["🏠 Home"])
 def read_home():
-    """
-    Welcome endpoint with API information
-    """
     return {
         "message": "Welcome to the Agentic Chatbot API! 🤖",
         "version": "1.0.0",
